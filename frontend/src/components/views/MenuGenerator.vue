@@ -3,6 +3,7 @@ import { ref, computed, watch, onMounted } from 'vue';
 import RecipePreview from '../RecipePreview.vue';
 import { sixteenthsToFraction } from '../../utils/decimalToFraction';
 import { getOptimalImage } from '../../utils/imageOptimizer';
+import { getDisplayString, getRawMath } from '../../utils/ingredientFormatter';
 
 // --- State: Filters & Parameters ---
 const targetMeals = ref(5);
@@ -278,7 +279,9 @@ const copyToClipboard = async () => {
             displayGroceries.value[aisle].forEach(item => {
                 if (!crossedOffItems.value.includes(item.name)) {
                     hasItems = true;
-                    aisleText += `- ${item.name} (${sixteenthsToFraction(item.amount)} ${item.unit})\n`;
+                    // Inject the new formatter here (scale is 1 because backend already scaled it)
+                    const display = getDisplayString(item.amount, item.unit, item.unit_conversion, 1);
+                    aisleText += `- ${item.name} (${display})\n`;
                 }
             });
             if (hasItems) text += aisleText + '\n';
@@ -293,7 +296,9 @@ const exportJSON = () => {
         if (displayGroceries.value[aisle]) {
             displayGroceries.value[aisle].forEach(item => {
                 if (!crossedOffItems.value.includes(item.name)) {
-                    payload[item.name] = { amount: item.amount, unit: item.unit, aisle: aisle };
+                    // Extract the raw floats for the automation JSON
+                    const parsed = getRawMath(item.amount, item.unit, item.unit_conversion, 1);
+                    payload[item.name] = { amount: parsed.amount, unit: parsed.unit, aisle: aisle };
                 }
             });
         }
@@ -387,8 +392,9 @@ const openPrintView = () => {
                                             @change="toggleCrossOff(item.name)" />
                                         <span class="g-name">{{ item.name }}</span>
                                     </label>
-                                    <span class="g-amount">{{ sixteenthsToFraction(item.amount) }} {{ item.unit
-                                    }}</span>
+                                    <span class="g-amount">
+                                        {{ getDisplayString(item.amount, item.unit, item.unit_conversion) }}
+                                    </span>
                                 </li>
                             </ul>
                         </div>

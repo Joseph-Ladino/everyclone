@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { sixteenthsToFraction } from '../../utils/decimalToFraction';
+import { getDisplayString } from '../../utils/ingredientFormatter';
 
 const printData = ref(null);
 
@@ -30,7 +31,7 @@ onMounted(() => {
                         :class="{ 'crossed-off': printData.crossedOff.includes(item.name) }">
                         <span class="box"></span>
                         <span class="name">{{ item.name }}</span>
-                        <span class="amount">{{ sixteenthsToFraction(item.amount) }} {{ item.unit }}</span>
+                        <span class="amount">{{ getDisplayString(item.amount, item.unit, item.unit_conversion) }}</span>
                     </li>
                 </ul>
             </div>

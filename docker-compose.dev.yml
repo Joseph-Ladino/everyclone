@@ -4,11 +4,10 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app  # Hot-reloading
-    env_file:
-      - .env
+      - ./backend:/app
     environment:
       - DATABASE_URL=postgresql://user:password@db:5432/everyplate_db
+      - FRONTEND_URL=http://localhost:5173
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     depends_on:
       - db
@@ -27,16 +26,13 @@ services:
     image: node:26-alpine
     container_name: ep_vue_dev
     working_dir: /app
-    # Map your local code into the container so HMR works
     volumes:
       - ./frontend:/app
-      - /app/node_modules # Prevents local node_modules from overwriting container's
+      - /app/node_modules 
     ports:
       - "5173:5173"
     environment:
       - VITE_API_URL=http://localhost:8000/api
-    # The --host flag is CRITICAL. Without it, Vite only binds to localhost inside 
-    # the container, meaning your host browser won't be able to reach it.
     command: sh -c "npm install && npm run dev -- --host"
     depends_on:
       - backend

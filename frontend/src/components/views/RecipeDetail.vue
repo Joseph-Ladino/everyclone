@@ -3,7 +3,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 import { getOptimalImage } from '../../utils/imageOptimizer';
-import { sixteenthsToFraction } from '../../utils/decimalToFraction';
+import { getDisplayString } from '../../utils/ingredientFormatter';
 import NutritionLabel from '../NutritionLabel.vue';
 
 const route = useRoute();
@@ -75,7 +75,9 @@ const stapleIngredients = computed(() => {
                             <img :src="getOptimalImage(ing.image_url, 80, 80)" :alt="ing.name" class="ing-thumb" />
                             <div class="ing-info">
                                 <span class="name"> {{ ing.name }} </span>
-                                <span class="amount">{{ sixteenthsToFraction(ing.amount * portionScale) }} {{ ing.unit }}</span>
+                                <span class="amount">
+                                    {{ getDisplayString(ing.amount, ing.unit, ing.unit_conversion, portionScale) }}
+                                </span>
                             </div>
                             <span v-if="ing.is_blend" class="prep-badge">Prep</span>
                         </RouterLink>
@@ -92,8 +94,8 @@ const stapleIngredients = computed(() => {
                 <ul class="staples-list">
                     <li v-for="ing in stapleIngredients" :key="ing.id">
                         <span class="staple-name">{{ ing.name }}</span>
-                        <span class="staple-amount" v-if="ing.amount">
-                            {{ sixteenthsToFraction(ing.amount * portionScale) }} {{ ing.unit }}
+                        <span class="staple-amount">
+                            {{ getDisplayString(ing.amount, ing.unit, ing.unit_conversion, portionScale) }}
                         </span>
                         <span v-if="ing.is_blend" class="prep-badge">Prep</span>
                     </li>

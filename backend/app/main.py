@@ -8,15 +8,19 @@ from pydantic import BaseModel
 from collections import Counter, defaultdict
 import random
 import math
+import os
 
 from app.models.database import SessionLocal, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag
+
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+origins = [FRONTEND_URL, "http://localhost:8081"]
 
 app = FastAPI(title="EveryPlate Proxy Backend")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"], # Your Vue dev server port
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"], # Allows GET, POST, PUT, DELETE, etc.
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
@@ -62,27 +66,31 @@ def get_full_recipe(recipe_id: str, db: Session = Depends(get_db)):
     recipe = db.query(Recipe).filter(Recipe.id == recipe_id).first()
     if not recipe:
         raise HTTPException(status_code=404, detail="Recipe not found")
-    
+
     # Manually join and format the ingredients
     links = db.query(RecipeIngredient, Ingredient).join(Ingredient).filter(
         RecipeIngredient.recipe_id == recipe_id
     ).all()
-    
-    ingredients_data = [{
-        "id": ing.id,
-        "name": ing.name,
-        "category": ing.category,
-        "image_url": ing.image_url,
-        "amount": link.amount,
-        "unit": link.unit,
-        "is_blend": ing.is_blend
-    } for link, ing in links]
+
+    ingredients_data = [
+        {
+            "id": ing.id,
+            "name": ing.name,
+            "category": ing.category,
+            "image_url": ing.image_url,
+            "amount": link.amount,
+            "unit": link.unit,
+            "is_blend": ing.is_blend,
+            "unit_conversion": ing.unit_conversion,
+        }
+        for link, ing in links
+    ]
 
     # Manually join the tags
     tag_links = db.query(RecipeTag, Tag).join(Tag).filter(
         RecipeTag.recipe_id == recipe_id
     ).all()
-    
+
     return {
         "id": recipe.id,
         "name": recipe.name,
@@ -145,7 +153,6 @@ def get_random_recipe_ids(limit: int = 5, db: Session = Depends(get_db)):
     return [id[0] for id in ids]
 
 
-
 def get_grocery_aisle(ingredient_name: str) -> str:
     """A prioritized lexical scanner to sort ingredients into supermarket aisles."""
     name = ingredient_name.lower()
@@ -195,7 +202,8 @@ def generate_grocery_list(request: GroceryListRequest, db: Session = Depends(get
             grocery_dict[category][name_lower] = {
                 "name": ingredient.name,
                 "amount": 0.0,
-                "unit": link.unit or ""
+                "unit": link.unit or "",
+                "unit_conversion": ingredient.unit_conversion
             }
         
         if link.amount:
