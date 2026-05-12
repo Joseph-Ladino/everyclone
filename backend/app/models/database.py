@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Float, ForeignKey, Text, create_engine
+from sqlalchemy import Column, String, Integer, Float, Boolean, ForeignKey, Text, create_engine
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker
 
@@ -40,6 +40,11 @@ class Ingredient(Base):
     name = Column(String, nullable=False)
     category = Column(String)
     image_url = Column(String)
+
+    # --- NEW SCM COLUMNS ---
+    is_blend = Column(Boolean, default=False)
+    blend_recipe = Column(JSONB, nullable=True) # Will hold dicts like {"Garlic Powder": {"amount": 1, "unit": "tbsp"}, etc}
+    unit_conversion = Column(JSONB, nullable=True) # Will hold dict like 1 unit = {"amount": 1, "unit": "tbsp"}
 
     recipes = relationship("RecipeIngredient", back_populates="ingredient")
 

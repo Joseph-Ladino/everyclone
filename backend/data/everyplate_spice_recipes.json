@@ -1,0 +1,866 @@
+{
+    "All American Spice Blend": {
+        "ingredients": {
+            "Ground Cumin": {
+                "amount": 1,
+                "unit": "tbsp"
+            },
+            "Cayenne": {
+                "amount": 1,
+                "unit": "tbsp"
+            },
+            "Onion Powder": {
+                "amount": 1,
+                "unit": "tbsp"
+            },
+            "Smoked Paprika": {
+                "amount": 1,
+                "unit": "tbsp"
+            },
+            "Garlic Powder": {
+                "amount": 2,
+                "unit": "tsp"
+            },
+            "Ground Coriander": {
+                "amount": 1,
+                "unit": "tsp"
+            },
+            "Salt": {
+                "amount": 1,
+                "unit": "tsp"
+            },
+            "Dried Parsley": {
+                "amount": 1,
+                "unit": "tsp"
+            },
+            "Black Pepper": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Dried Mustard": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Red Pepper Flakes": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Ground Allspice": {
+                "amount": 0.25,
+                "unit": "tsp"
+            },
+            "Ground Cloves": {
+                "amount": 0.125,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 6.25
+    },
+    "Berbere Spice Blend": {
+        "ingredients": {
+            "Paprika": {
+                "amount": 0.875,
+                "unit": "tbsp"
+            },
+            "Cayenne": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Ground Coriander": {
+                "amount": 0.4375,
+                "unit": "tsp"
+            },
+            "Ground Ginger": {
+                "amount": 0.25,
+                "unit": "tsp"
+            },
+            "Ground Cardamom": {
+                "amount": 0.125,
+                "unit": "tsp"
+            },
+            "Ground Fenugreek": {
+                "amount": 0.125,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Blackening Spice Blend": {
+        "ingredients": {
+            "Smoked Paprika": {
+                "amount": 3,
+                "unit": "tsp"
+            },
+            "Garlic Powder": {
+                "amount": 1.5,
+                "unit": "tsp"
+            },
+            "White Pepper": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Black Pepper": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Thyme": {
+                "amount": 0.25,
+                "unit": "tsp"
+            },
+            "Oregano": {
+                "amount": 0.25,
+                "unit": "tsp"
+            },
+            "Low Heat Cayenne": {
+                "amount": 0.125,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 2
+    },
+    "Bold and Savory Steak Spice Blend": {
+        "ingredients": {
+            "Red Chili Flake": {
+                "amount": 0.3125,
+                "unit": "tsp"
+            },
+            "Crushed Coriander Seed": {
+                "amount": 0.3125,
+                "unit": "tsp"
+            },
+            "Crushed Dill Seed": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Crushed Mustard Seed": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Dried Minced Garlic": {
+                "amount": 0.375,
+                "unit": "tbsp"
+            },
+            "Crushed Black Pepper": {
+                "amount": 0.375,
+                "unit": "tbsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Burger Spice Blend": {
+        "ingredients": {
+            "Paprika": {
+                "amount": 1,
+                "unit": "tbsp"
+            },
+            "Salt": {
+                "amount": 1.25,
+                "unit": "tsp"
+            },
+            "Ground Black Pepper": {
+                "amount": 1,
+                "unit": "tsp"
+            },
+            "Garlic Powder": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Brown Sugar": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Onion Powder": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Ground Cayenne Pepper": {
+                "amount": 0.25,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 2.375
+    },
+    "Cajun Spice Blend": {
+        "ingredients": {
+            "Paprika": {
+                "amount": 0.375,
+                "unit": "tbsp"
+            },
+            "Onion Powder": {
+                "amount": 0.375,
+                "unit": "tbsp"
+            },
+            "Garlic Powder": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Dried Oregano": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Dried Thyme": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Dried Basil": {
+                "amount": 0.3125,
+                "unit": "tsp"
+            },
+            "Cayenne": {
+                "amount": 0.3125,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Enchilada Spice Blend": {
+        "ingredients": {
+            "Chili Powder": {
+                "amount": 1,
+                "unit": "tbsp"
+            },
+            "Paprika": {
+                "amount": 1,
+                "unit": "tbsp"
+            },
+            "Cumin": {
+                "amount": 2,
+                "unit": "tsp"
+            },
+            "Light Brown Sugar": {
+                "amount": 2,
+                "unit": "tsp"
+            },
+            "Kosher Salt": {
+                "amount": 2,
+                "unit": "tsp"
+            },
+            "Onion Powder": {
+                "amount": 1.5,
+                "unit": "tsp"
+            },
+            "Garlic Powder": {
+                "amount": 1.5,
+                "unit": "tsp"
+            },
+            "Mexican Oregano": {
+                "amount": 1.5,
+                "unit": "tsp"
+            },
+            "Chipotle Chili Powder": {
+                "amount": 1,
+                "unit": "tsp"
+            },
+            "Ground Coriander": {
+                "amount": 1,
+                "unit": "tsp"
+            },
+            "Black Pepper": {
+                "amount": 1,
+                "unit": "tsp"
+            },
+            "Cayenne Pepper": {
+                "amount": 0.25,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 6.625
+    },
+    "Fajita Spice Blend": {
+        "ingredients": {
+            "Paprika": {
+                "amount": 0.625,
+                "unit": "tbsp"
+            },
+            "Onion Powder": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Garlic Powder": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Chili Powder": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Cumin": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Oregano": {
+                "amount": 0.5,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Fall Spice Blend": {
+        "ingredients": {
+            "Dried Thyme": {
+                "amount": 0.5,
+                "unit": "tbsp"
+            },
+            "Ground Sage": {
+                "amount": 0.5,
+                "unit": "tbsp"
+            },
+            "Garlic Powder": {
+                "amount": 0.375,
+                "unit": "tbsp"
+            },
+            "Onion Powder": {
+                "amount": 0.5,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Fry Seasoning": {
+        "ingredients": {
+            "Garlic Powder": {
+                "amount": 0.5,
+                "unit": "tbsp"
+            },
+            "Onion Powder": {
+                "amount": 0.5,
+                "unit": "tbsp"
+            },
+            "Paprika": {
+                "amount": 0.5,
+                "unit": "tbsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Herbes de Provence Blend": {
+        "ingredients": {
+            "Savory": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Thyme": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Rosemary": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Basil": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Tarragon": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Lavender Flowers": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Italian Seasoning Blend": {
+        "ingredients": {
+            "Garlic Powder": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Oregano": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Basil": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Black Pepper": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Parsley": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Meatloaf Seasoning": {
+        "ingredients": {
+            "Onion Powder": {
+                "amount": 0.75,
+                "unit": "tbsp"
+            },
+            "Garlic Powder": {
+                "amount": 0.75,
+                "unit": "tbsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Mediterranean Spice Blend": {
+        "ingredients": {
+            "Dried Oregano": {
+                "amount": 0.625,
+                "unit": "tbsp"
+            },
+            "Dried Mint": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Sumac": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Ground Coriander": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Mexican Spice Blend": {
+        "ingredients": {
+            "Chili Powder": {
+                "amount": 2,
+                "unit": "tbsp"
+            },
+            "Cumin": {
+                "amount": 1,
+                "unit": "tbsp"
+            },
+            "Salt": {
+                "amount": 0.5,
+                "unit": "tbsp"
+            },
+            "Ground Black Pepper": {
+                "amount": 0.5,
+                "unit": "tbsp"
+            },
+            "Paprika": {
+                "amount": 1,
+                "unit": "tsp"
+            },
+            "Red Pepper Flakes": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Oregano": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Garlic Powder": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Onion Powder": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Ground Cayenne Pepper": {
+                "amount": 0.25,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 5.125
+    },
+    "Moo Shu Spice Blend": {
+        "ingredients": {
+            "Ground Ginger": {
+                "amount": 0.75,
+                "unit": "tbsp"
+            },
+            "Garlic Powder": {
+                "amount": 0.75,
+                "unit": "tbsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Nan's Seasoning (aka Grandma's Seasoning)": {
+        "ingredients": {
+            "Paprika": {
+                "amount": 1,
+                "unit": "tsp"
+            },
+            "Sugar": {
+                "amount": 1,
+                "unit": "tsp"
+            },
+            "Sea Salt": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Garlic Powder": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Onion Powder": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Black Pepper": {
+                "amount": 0.5,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 1.375
+    },
+    "Ras El Hanout": {
+        "ingredients": {
+            "Ground Cumin": {
+                "amount": 1,
+                "unit": "tsp"
+            },
+            "Ground Ginger": {
+                "amount": 1,
+                "unit": "tsp"
+            },
+            "Salt": {
+                "amount": 1,
+                "unit": "tsp"
+            },
+            "Freshly Ground Black Pepper": {
+                "amount": 0.75,
+                "unit": "tsp"
+            },
+            "Ground Cinnamon": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Ground Coriander Seeds": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Cayenne": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Ground Allspice": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Ground Cloves": {
+                "amount": 0.25,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 2
+    },
+    "Shawarma Spice Blend": {
+        "ingredients": {
+            "Tumeric": {
+                "amount": 0.375,
+                "unit": "tbsp"
+            },
+            "Cumin": {
+                "amount": 0.375,
+                "unit": "tbsp"
+            },
+            "Dried Coriander": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Garlic Powder": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Paprika": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Ground Allspice": {
+                "amount": 0.3125,
+                "unit": "tsp"
+            },
+            "Black Pepper": {
+                "amount": 0.3125,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Smokey BBQ Seasoning": {
+        "ingredients": {
+            "Smoked Paprika": {
+                "amount": 0.625,
+                "unit": "tbsp"
+            },
+            "Granulated Sugar": {
+                "amount": 0.5,
+                "unit": "tbsp"
+            },
+            "Garlic Powder": {
+                "amount": 0.4375,
+                "unit": "tsp"
+            },
+            "Dry Mustard": {
+                "amount": 0.25,
+                "unit": "tsp"
+            },
+            "Ground Cumin": {
+                "amount": 0.25,
+                "unit": "tsp"
+            },
+            "Ground Ginger": {
+                "amount": 0.25,
+                "unit": "tsp"
+            },
+            "Black Pepper": {
+                "amount": 0.125,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Smoky Cinnamon Paprika Spice Blend": {
+        "ingredients": {
+            "Ground Cloves": {
+                "amount": 0.0625,
+                "unit": "tsp"
+            },
+            "Onion Powder": {
+                "amount": 0.4375,
+                "unit": "tsp"
+            },
+            "Ground Cinnamon": {
+                "amount": 0.4375,
+                "unit": "tsp"
+            },
+            "Smoked Paprika": {
+                "amount": 0.3125,
+                "unit": "tsp"
+            },
+            "Mustard Powder": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Sweet Paprika": {
+                "amount": 0.375,
+                "unit": "tbsp"
+            },
+            "Sugar": {
+                "amount": 0.375,
+                "unit": "tbsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Southwest Spice Blend": {
+        "ingredients": {
+            "Garlic Powder": {
+                "amount": 0.75,
+                "unit": "tbsp"
+            },
+            "Cumin": {
+                "amount": 0.375,
+                "unit": "tbsp"
+            },
+            "Chili Powder": {
+                "amount": 0.375,
+                "unit": "tbsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Steak Spice Blend": {
+        "ingredients": {
+            "Red Chili Flakes": {
+                "amount": 0.25,
+                "unit": "tsp"
+            },
+            "Crushed Coriander Seed": {
+                "amount": 0.25,
+                "unit": "tsp"
+            },
+            "Crushed Dill Seed": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Crushed Mustard Seed": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Dried Minced Garlic": {
+                "amount": 0.375,
+                "unit": "tbsp"
+            },
+            "Crushed Black Pepper": {
+                "amount": 0.375,
+                "unit": "tbsp"
+            },
+            "Kosher Salt": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Sweet Smoky BBQ Spice Blend": {
+        "ingredients": {
+            "Smoked Paprika": {
+                "amount": 0.625,
+                "unit": "tbsp"
+            },
+            "Sugar": {
+                "amount": 0.5,
+                "unit": "tbsp"
+            },
+            "Garlic Powder": {
+                "amount": 0.4375,
+                "unit": "tsp"
+            },
+            "Black Pepper": {
+                "amount": 0.125,
+                "unit": "tsp"
+            },
+            "Dry Mustard": {
+                "amount": 0.25,
+                "unit": "tsp"
+            },
+            "Cumin": {
+                "amount": 0.25,
+                "unit": "tsp"
+            },
+            "Ground Ginger": {
+                "amount": 0.25,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Thai Seven Spice Blend": {
+        "ingredients": {
+            "White Sesame Seeds": {
+                "amount": 2.5,
+                "unit": "tsp"
+            },
+            "Chili Flakes": {
+                "amount": 1,
+                "unit": "tsp"
+            },
+            "Ground Coriander": {
+                "amount": 1,
+                "unit": "tsp"
+            },
+            "Onion Powder": {
+                "amount": 1,
+                "unit": "tsp"
+            },
+            "Garlic Powder": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Shrimp Extract Powder": {
+                "amount": 0.5,
+                "unit": "tsp"
+            },
+            "Cinnamon": {
+                "amount": 0.25,
+                "unit": "tsp"
+            },
+            "Low Heat Cayenne": {
+                "amount": 0.125,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 2.25
+    },
+    "Tunisian Spice Blend": {
+        "ingredients": {
+            "Ground Caraway Seed": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Ground Coriander": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Smoked Paprika": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Turmeric": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Chili Powder": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Garlic Powder": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Cayenne Pepper": {
+                "amount": 0.1875,
+                "unit": "tsp"
+            },
+            "Cinnamon": {
+                "amount": 0.1875,
+                "unit": "tsp"
+            },
+            "Ground Black Pepper": {
+                "amount": 0.1875,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Turkish Spice Blend": {
+        "ingredients": {
+            "Cumin": {
+                "amount": 0.5,
+                "unit": "tbsp"
+            },
+            "Garlic Powder": {
+                "amount": 0.5,
+                "unit": "tbsp"
+            },
+            "Ground Coriander": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Ground Allspice": {
+                "amount": 0.1875,
+                "unit": "tsp"
+            },
+            "Chili Flakes": {
+                "amount": 0.1875,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    },
+    "Tuscan Heat Spice Blend": {
+        "ingredients": {
+            "Dried Basil": {
+                "amount": 0.5,
+                "unit": "tbsp"
+            },
+            "Dried Rosemary": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Dried Oregano": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Garlic Powder": {
+                "amount": 0.25,
+                "unit": "tbsp"
+            },
+            "Cayenne Pepper": {
+                "amount": 0.375,
+                "unit": "tsp"
+            },
+            "Ground Fennel": {
+                "amount": 0.375,
+                "unit": "tsp"
+            }
+        },
+        "yield_tbsp": 1.5
+    }
+}

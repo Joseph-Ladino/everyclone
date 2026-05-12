@@ -1,15 +1,24 @@
 from fastapi import FastAPI, Depends, HTTPException
-from sqlalchemy.orm import Session, joinedload  # <-- Add joinedload here
+from fastapi.middleware.cors import CORSMiddleware
+
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import func
 from typing import List
 from pydantic import BaseModel
-from collections import Counter
+from collections import Counter, defaultdict
 import random
 import math
 
 from app.models.database import SessionLocal, Recipe, Ingredient, RecipeIngredient, Tag, RecipeTag
 
 app = FastAPI(title="EveryPlate Proxy Backend")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"], # Your Vue dev server port
+    allow_credentials=True,
+    allow_methods=["*"], # Allows GET, POST, PUT, DELETE, etc.
+    allow_headers=["*"],
+)
 
 def get_db():
     db = SessionLocal()
@@ -37,7 +46,7 @@ class RecipePageOut(BaseModel):
     recipes: List[RecipeOut]
 
 class GroceryListRequest(BaseModel):
-    recipe_ids: List[str]
+    recipe_scales: dict[str, float] # e.g., {"recipe_id_1": 1.0, "recipe_id_2": 1.5}
 
 class MenuProposalRequest(BaseModel):
     target_meals: int = 5
@@ -63,8 +72,10 @@ def get_full_recipe(recipe_id: str, db: Session = Depends(get_db)):
         "id": ing.id,
         "name": ing.name,
         "category": ing.category,
+        "image_url": ing.image_url,
         "amount": link.amount,
-        "unit": link.unit
+        "unit": link.unit,
+        "is_blend": ing.is_blend
     } for link, ing in links]
 
     # Manually join the tags
@@ -106,6 +117,9 @@ def get_full_ingredient(ingredient_id: str, db: Session = Depends(get_db)):
         "name": ing.name,
         "category": ing.category,
         "image_url": ing.image_url,
+        "is_blend": ing.is_blend,
+        "blend_recipe": ing.blend_recipe,
+        "unit_conversion": ing.unit_conversion,
         "used_in_recipes_count": usage_count
     }
 
@@ -130,51 +144,72 @@ def get_random_recipe_ids(limit: int = 5, db: Session = Depends(get_db)):
     ids = db.query(Recipe.id).order_by(func.random()).limit(limit).all()
     return [id[0] for id in ids]
 
+
+
+def get_grocery_aisle(ingredient_name: str) -> str:
+    """A prioritized lexical scanner to sort ingredients into supermarket aisles."""
+    name = ingredient_name.lower()
+    
+    # Order matters. We check these buckets sequentially.
+    taxonomy = {
+        # Spices MUST go first to catch "Garlic Powder" or "Dried Parsley" 
+        # before the Produce bucket catches the raw root words.
+        "Spices & Seasonings": ["salt", "black pepper", "white pepper", "paprika", "garlic powder", "onion powder", "spice", "seasoning", "powder", "blend", "rub", "flakes", "dried", "cumin", "cayenne", "coriander", "oregano", "thyme", "basil", "cinnamon", "clove", "allspice", "nutmeg", "turmeric", "sumac"],
+        "Pantry & Dry Goods": ["rice", "pasta", "couscous", "spaghetti", "penne", "macaroni", "flour", "sugar", "oil", "almond", "peanut", "walnut", "sesame", "seed", "panko", "breadcrumbs"],
+        "Sauces & Condiments": ["soy sauce", "pesto", "mayo", "ketchup", "mustard", "vinegar", "hot sauce", "sriracha", "paste", "concentrate", "stock", "broth", "jam", "glaze", "dressing", "sauce", "syrup", "honey"],
+        "Seafood": ["shrimp", "salmon", "tilapia", "barramundi", "cod", "trout", "fish"],
+        "Dairy & Eggs": ["cheese", "milk", "butter", "egg", "sour cream", "yogurt", "crema", "parmesan", "gouda", "cheddar", "mozzarella", "jack"],
+        "Bakery": ["bun", "bread", "tortilla", "flatbread", "baguette", "pita", "crust", "roll"],
+        "Produce": ["onion", "garlic", "chives", "lemon", "lime", "potato", "carrot", "scallion", "tomato", "pepper", "ginger", "zucchini", "broccoli", "lettuce", "cabbage", "cilantro", "parsley", "dill", "apple", "cucumber", "arugula", "spinach", "mushroom", "celery", "shallot"],
+        "Meat & Poultry": ["chicken", "beef", "pork", "sausage", "turkey", "bacon", "steak", "prosciutto", "chorizo", "meatball"],
+    }
+    
+    for aisle, keywords in taxonomy.items():
+        if any(word in name for word in keywords):
+            return aisle
+            
+    return "Misc / Other"
+
+
 @app.post("/api/grocery-list")
 def generate_grocery_list(request: GroceryListRequest, db: Session = Depends(get_db)):
-    """Takes a list of recipe IDs and spits out an itemized grocery list."""
+    """The Categorized Bulk-Optimized Grocery Engine."""
+    
+    unique_recipe_ids = list(request.recipe_scales.keys())
 
-    # 1. Tally up how many times each recipe was requested
-    recipe_counts = Counter(request.recipe_ids)
-    unique_recipe_ids = list(recipe_counts.keys())
-
-    # 2. Query Postgres using only the unique IDs
-    items = (
-        db.query(RecipeIngredient, Ingredient)
-        .join(Ingredient)
-        .filter(RecipeIngredient.recipe_id.in_(unique_recipe_ids))
-        .all()
-    )
+    items = db.query(RecipeIngredient, Ingredient).join(Ingredient).filter(
+        RecipeIngredient.recipe_id.in_(unique_recipe_ids)
+    ).all()
 
     if not items:
-        raise HTTPException(
-            status_code=404, detail="No ingredients found for these recipes."
-        )
+        raise HTTPException(status_code=404, detail="No ingredients found for these recipes.")
 
-    grocery_dict = {}
+    # ONE dictionary to rule them all
+    grocery_dict = defaultdict(dict)
 
     for link, ingredient in items:
         name_lower = ingredient.name.strip().lower()
+        category = get_grocery_aisle(ingredient.name)
 
-        if name_lower not in grocery_dict:
-            grocery_dict[name_lower] = {
+        if name_lower not in grocery_dict[category]:
+            grocery_dict[category][name_lower] = {
                 "name": ingredient.name,
-                "category": ingredient.category,
                 "amount": 0.0,
-                "unit": link.unit or "",
+                "unit": link.unit or ""
             }
-
-        # 3. Multiply the base amount by the number of times the recipe was requested
+        
         if link.amount:
-            multiplier = recipe_counts[link.recipe_id]
-            grocery_dict[name_lower]["amount"] += link.amount * multiplier
+            multiplier = request.recipe_scales.get(link.recipe_id, 1.0)
+            grocery_dict[category][name_lower]["amount"] += (link.amount * multiplier)
 
-    final_list = list(grocery_dict.values())
-    final_list.sort(key=lambda x: x["category"])
+    # Sort the single dictionary
+    formatted = {}
+    for cat, items_dict in grocery_dict.items():
+        formatted[cat] = sorted(list(items_dict.values()), key=lambda x: x["name"])
 
-    return {"grocery_list": final_list}
+    return formatted
 
-@app.post("/api/propose-menu", response_model=List[RecipeOut])
+@app.post("/api/propose-menu")
 def propose_menu(request: MenuProposalRequest, db: Session = Depends(get_db)):
     """
     The Bulk-Optimized Menu Generator.
@@ -198,7 +233,7 @@ def propose_menu(request: MenuProposalRequest, db: Session = Depends(get_db)):
         Recipe.rating >= request.min_rating
     ).limit(300).all() 
 
-    valid_candidates = []
+    valid_candidates: list[Recipe] = []
     for recipe in candidates:
         name_lower = recipe.name.lower()
         if any(anchor in name_lower for anchor in anchors):
@@ -267,4 +302,29 @@ def propose_menu(request: MenuProposalRequest, db: Session = Depends(get_db)):
             if primary_anchor:
                 anchor_counts[primary_anchor] += 1
 
-    return final_menu
+    result = []
+    for recipe in final_menu:
+        # We manually bridge the gap between the link table and the ingredient table
+        ingredients_data = [{
+            "id": link.ingredient.id,
+            "name": link.ingredient.name,
+            "amount": link.amount,
+            "unit": link.unit,
+            "image_url": link.ingredient.image_url,
+            "is_blend": link.ingredient.is_blend,
+            "blend_recipe": link.ingredient.blend_recipe,
+            "unit_conversion": link.ingredient.unit_conversion
+        } for link in recipe.ingredients]
+
+        result.append({
+            "id": recipe.id,
+            "name": recipe.name,
+            "headline": recipe.headline,
+            "rating": recipe.rating,
+            "prep_time_minutes": recipe.prep_time_minutes,
+            "image_url": recipe.image_url,
+            "ingredients": ingredients_data,
+            "calories": recipe.nutrition[0]["amount"]
+        })
+
+    return result

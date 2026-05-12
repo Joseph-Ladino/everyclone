@@ -2,6 +2,9 @@ from pydantic import BaseModel, Field, field_validator
 from typing import List, Optional, Dict, Any
 import re
 
+# Compile outside the function so Python only builds the state machine once
+HOUR_PATTERN = re.compile(r"(\d+)H")
+MIN_PATTERN = re.compile(r"(\d+)M")
 
 # --- INGREDIENT SCHEMAS ---
 class EPIngredientFamily(BaseModel):
@@ -63,8 +66,14 @@ class EPRecipe(BaseModel):
     @field_validator("prepTime")
     @classmethod
     def parse_prep_time(cls, v: str) -> int:
-        """Extracts the integer from an ISO 8601 string like 'PT25M'"""
+        """Extracts total minutes from an ISO 8601 duration string like 'PT1H30M'"""
         if not v:
             return 0
-        match = re.search(r"PT(\d+)M", v)
-        return int(match.group(1)) if match else 0
+            
+        h_match = HOUR_PATTERN.search(v)
+        m_match = MIN_PATTERN.search(v)
+        
+        hours = int(h_match.group(1)) * 60 if h_match else 0
+        minutes = int(m_match.group(1)) if m_match else 0
+        
+        return hours + minutes

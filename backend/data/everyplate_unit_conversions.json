@@ -1,0 +1,298 @@
+{
+    "Apricot Jam Spread": {
+        "amount": 1,
+        "unit": "oz"
+    },
+    "Arborio Rice": {
+        "amount": 5.75,
+        "unit": "oz"
+    },
+    "Baby Lettuce": {
+        "amount": 5.75,
+        "unit": "oz"
+    },
+    "Balsamic Vinegar": {
+        "amount": 25,
+        "unit": "ml"
+    },
+    "Basmati Rice": {
+        "amount": 0.5,
+        "unit": "cup"
+    },
+    "Beef Stock Concentrate": {
+        "amount": 0.42,
+        "unit": "oz"
+    },
+    "Black Beans": {
+        "amount": 15.5,
+        "unit": "oz"
+    },
+    "Buttermilk Ranch Dressing": {
+        "amount": 1.5,
+        "unit": "oz"
+    },
+    "Button Mushrooms": {
+        "amount": 4,
+        "unit": "oz"
+    },
+    "Cavatappi Pasta": {
+        "amount": 6,
+        "unit": "oz"
+    },
+    "Cherry Jam": {
+        "amount": 1,
+        "unit": "oz"
+    },
+    "Chicken Demi-Glace": {
+        "amount": 1.32,
+        "unit": "oz"
+    },
+    "Chicken Stock Concentrate": {
+        "amount": 0.34,
+        "unit": "oz"
+    },
+    "Chickpeas": {
+        "amount": 13.4,
+        "unit": "oz"
+    },
+    "Ciabatta": {
+        "amount": 4,
+        "unit": "4-inches"
+    },
+    "Cilantro": {
+        "amount": 0.4,
+        "unit": "oz"
+    },
+    "Coconut Milk": {
+        "amount": 6.09,
+        "unit": "fl oz"
+    },
+    "Coleslaw": {
+        "amount": 3,
+        "unit": "tbsp"
+    },
+    "Corn": {
+        "amount": 15.25,
+        "unit": "oz"
+    },
+    "Corn Starch": {
+        "amount": 1,
+        "unit": "tbsp"
+    },
+    "Cranberries": {
+        "amount": 1,
+        "unit": "oz"
+    },
+    "Cream Cheese": {
+        "amount": 2,
+        "unit": "tbsp"
+    },
+    "Cream Sauce Base": {
+        "amount": 4,
+        "unit": "oz"
+    },
+    "Crispy Fried Onions": {
+        "amount": 1,
+        "unit": "oz"
+    },
+    "Curry Powder": {
+        "amount": 1,
+        "unit": "tbsp"
+    },
+    "Dijon Honey Mustard Dressing": {
+        "amount": 1.5,
+        "unit": "oz"
+    },
+    "Dijon Mustard": {
+        "amount": 0.25,
+        "unit": "oz"
+    },
+    "Dried Thyme": {
+        "amount": 1,
+        "unit": "tsp"
+    },
+    "Farro": {
+        "amount": 0.75,
+        "unit": "cup"
+    },
+    "Flour Tortillas": {
+        "amount": 6,
+        "unit": "6-inch tortilla"
+    },
+    "Frank's Hot Sauce": {
+        "amount": 0.25,
+        "unit": "oz"
+    },
+    "Frank's Seasoning Blend": {
+        "amount": 0.25,
+        "unit": "oz"
+    },
+    "Fry Seasoning": {
+        "amount": 0.25,
+        "unit": "oz"
+    },
+    "Garlic Powder": {
+        "amount": 1,
+        "unit": "tsp"
+    },
+    "Ginger": {
+        "amount": 0.5,
+        "unit": "oz"
+    },
+    "Green Beans": {
+        "amount": 6,
+        "unit": "oz"
+    },
+    "Hoisin Sauce": {
+        "amount": 1,
+        "unit": "fl oz"
+    },
+    "Honey": {
+        "amount": 0.5,
+        "unit": "oz"
+    },
+    "Israeli Couscous": {
+        "amount": 0.5,
+        "unit": "cup"
+    },
+    "Italian Seasoning": {
+        "amount": 1,
+        "unit": "tbsp"
+    },
+    "Jasmine Rice": {
+        "amount": 0.75,
+        "unit": "cup"
+    },
+    "Linguine Pasta": {
+        "amount": 6,
+        "unit": "oz"
+    },
+    "Marinara Sauce": {
+        "amount": 2.5,
+        "unit": "oz"
+    },
+    "Oregano": {
+        "amount": 1,
+        "unit": "tsp"
+    },
+    "Orzo": {
+        "amount": 6,
+        "unit": "oz"
+    },
+    "Panko Breadcrumbs": {
+        "amount": 0.5,
+        "unit": "cup"
+    },
+    "Paprika": {
+        "amount": 1,
+        "unit": "tsp"
+    },
+    "Parsley": {
+        "amount": 0.25,
+        "unit": "oz"
+    },
+    "Peanuts": {
+        "amount": 1,
+        "unit": "oz"
+    },
+    "Ponzu Sauce": {
+        "amount": 2,
+        "unit": "tsp"
+    },
+    "Reduced Fat Milk": {
+        "amount": 8,
+        "unit": "oz"
+    },
+    "Scallions": {
+        "amount": 2,
+        "unit": "stalks"
+    },
+    "Shredded Cheddar": {
+        "amount": 2,
+        "unit": "oz"
+    },
+    "Shredded Monterey Jack": {
+        "amount": 1,
+        "unit": "oz"
+    },
+    "Shredded Mozzarella": {
+        "amount": 2,
+        "unit": "oz"
+    },
+    "Shredded Parmesan": {
+        "amount": 0.75,
+        "unit": "oz"
+    },
+    "Shredded Pepper Jack": {
+        "amount": 2,
+        "unit": "oz"
+    },
+    "Smoked Paprika": {
+        "amount": 1,
+        "unit": "tsp"
+    },
+    "Smoky Red Pepper Crema": {
+        "amount": 2,
+        "unit": "tbsp"
+    },
+    "Sour Cream": {
+        "amount": 1,
+        "unit": "oz"
+    },
+    "Southwest Spice Blend": {
+        "amount": 1,
+        "unit": "tbsp"
+    },
+    "Soy Sauce": {
+        "amount": 0.34,
+        "unit": "oz"
+    },
+    "Spinach": {
+        "amount": 5,
+        "unit": "oz"
+    },
+    "Sugar Snap Peas": {
+        "amount": 4,
+        "unit": "oz"
+    },
+    "Sweet Thai Chili Sauce": {
+        "amount": 2,
+        "unit": "tbsp"
+    },
+    "Tex-Mex Paste": {
+        "amount": 1,
+        "unit": "oz"
+    },
+    "Tomato Paste": {
+        "amount": 1.5,
+        "unit": "oz"
+    },
+    "Turkish Spice Blend": {
+        "amount": 1,
+        "unit": "tbsp"
+    },
+    "Tuscan Heat Spice": {
+        "amount": 1,
+        "unit": "tbsp"
+    },
+    "Veggie Stock Concentrate": {
+        "amount": 0.34,
+        "unit": "oz"
+    },
+    "Wasabi": {
+        "amount": 0.15,
+        "unit": "oz"
+    },
+    "White Rice": {
+        "amount": 0.75,
+        "unit": "cup"
+    },
+    "White Wine Vinegar": {
+        "amount": 25,
+        "unit": "ml"
+    },
+    "Yogurt": {
+        "amount": 1,
+        "unit": "oz"
+    }
+}
