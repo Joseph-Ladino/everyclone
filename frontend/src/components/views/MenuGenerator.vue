@@ -70,12 +70,49 @@ const closeSwapModal = () => {
     swapCandidates.value = [];
 };
 
-// --- Lifecycle: LocalStorage Hydration ---
-onMounted(() => {
-    const savedMenu = localStorage.getItem('ep_menu');
-    if (savedMenu) {
-        proposedMenu.value = JSON.parse(savedMenu);
-        targetMeals.value = proposedMenu.value.length;
+// --- NEW: Share Link Generator ---
+const copyShareLink = async () => {
+    if (proposedMenu.value.length === 0) return alert("Generate a menu first!");
+
+    // Grab just the IDs and join them with a comma
+    const ids = proposedMenu.value.map(r => r.id).join(',');
+    const shareUrl = `${window.location.origin}/?share=${ids}`;
+
+    try {
+        await navigator.clipboard.writeText(shareUrl);
+        alert("Share link copied to clipboard!");
+    } catch (err) {
+        console.error("Failed to copy", err);
+    }
+};
+
+// --- UPDATED: Lifecycle Hydration ---
+onMounted(async () => {
+    // 1. Check for the share parameter first
+    const urlParams = new URLSearchParams(window.location.search);
+    const shareParam = urlParams.get('share');
+
+    if (shareParam) {
+        const idsToFetch = shareParam.split(',');
+        try {
+            // Fetch all fresh recipes simultaneously
+            const fetchedRecipes = await Promise.all(
+                idsToFetch.map(id => fetch(`${import.meta.env.VITE_API_URL}/recipes/${id}`).then(res => res.json()))
+            );
+
+            // Inject them into the menu with a default scale of 1
+            proposedMenu.value = fetchedRecipes.map(r => ({ ...r, scale: 1 }));
+
+            // Clean the URL so refreshing doesn't re-trigger the fetch
+            window.history.replaceState({}, document.title, window.location.pathname);
+        } catch (error) {
+            console.error("Failed to load shared menu:", error);
+            alert("This share link might be broken or contain old IDs.");
+        }
+    } else {
+        // 2. Fall back to normal LocalStorage hydration if no share link
+        const savedMenu = localStorage.getItem('ep_menu');
+        if (savedMenu) proposedMenu.value = JSON.parse(savedMenu);
     }
 
     const savedPrep = localStorage.getItem('ep_prep');
@@ -87,7 +124,6 @@ onMounted(() => {
     const savedOrder = localStorage.getItem('ep_order');
     if (savedOrder) {
         let parsedOrder = JSON.parse(savedOrder);
-        // 2. The Patch: Inject any new backend categories into the user's saved layout
         defaultCategories.forEach(cat => {
             if (!parsedOrder.includes(cat)) parsedOrder.push(cat);
         });
@@ -291,23 +327,76 @@ const copyToClipboard = async () => {
 };
 
 const exportJSON = () => {
-    const payload = {};
+    // Wrap the payload to include meals AND groceries
+    const payload = {
+        meals: proposedMenu.value.map(m => ({
+            id: m.id,
+            name: m.name,
+            scale: m.scale || 1
+        })),
+        groceries: {}
+    };
+
     categoryOrder.value.forEach(aisle => {
         if (displayGroceries.value[aisle]) {
             displayGroceries.value[aisle].forEach(item => {
                 if (!crossedOffItems.value.includes(item.name)) {
-                    // Extract the raw floats for the automation JSON
                     const parsed = getRawMath(item.amount, item.unit, item.unit_conversion, 1);
-                    payload[item.name] = { amount: parsed.amount, unit: parsed.unit, aisle: aisle };
+                    // Push to the nested groceries object
+                    payload.groceries[item.name] = { amount: parsed.amount, unit: parsed.unit, aisle: aisle };
                 }
             });
         }
     });
+
     const blob = new Blob([JSON.stringify(payload, null, 4)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = 'grocery_export.json'; a.click();
+    a.href = url;
+    a.download = 'everyplate_full_export.json';
+    a.click();
     URL.revokeObjectURL(url);
+};
+
+// --- NEW: Import Data ---
+const importJSON = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (!data.meals || !Array.isArray(data.meals)) {
+                throw new Error("Invalid format: Missing meals array");
+            }
+            
+            // Wipe the current crossed-off list for a fresh start
+            crossedOffItems.value = [];
+            
+            // Fetch fresh recipe data from the database using the imported IDs
+            const idsToFetch = data.meals.map(m => m.id);
+            const fetchedRecipes = await Promise.all(
+                idsToFetch.map(id => fetch(`${import.meta.env.VITE_API_URL}/recipes/${id}`).then(res => res.json()))
+            );
+
+            // Re-apply the custom scales from the JSON file
+            proposedMenu.value = fetchedRecipes.map(r => {
+                const savedMeal = data.meals.find(m => m.id === r.id);
+                return { ...r, scale: savedMeal?.scale || 1 };
+            });
+
+            // Automatically switch back to the groceries tab to see the result
+            drawerTab.value = 'groceries';
+
+            // Reset the file input so you can upload the same file again if needed
+            event.target.value = '';
+
+        } catch (err) {
+            console.error("Import failed", err);
+            alert("Failed to import data. Please ensure it's a valid EveryPlate export file.");
+        }
+    };
+    reader.readAsText(file);
 };
 
 const openPrintView = () => {
@@ -364,14 +453,21 @@ const openPrintView = () => {
 
         <aside class="grocery-drawer" :class="{ 'open': isDrawerOpen }">
             <div class="drawer-tabs">
-                <button :class="{ active: drawerTab === 'groceries' }" @click="drawerTab = 'groceries'">Grocery
-                    List</button>
-                <button :class="{ active: drawerTab === 'prep' }" @click="drawerTab = 'prep'">Prep Sheet</button>
-                <button @click="isDrawerOpen = false" class="close-btn">✖</button>
+                <button :class="{ active: drawerTab === 'groceries' }" @click="drawerTab = 'groceries'">
+                    Grocery List
+                </button>
+                <button :class="{ active: drawerTab === 'prep' }" @click="drawerTab = 'prep'">
+                    Prep Sheet
+                </button>
+                <button :class="{ active: drawerTab === 'data' }" @click="drawerTab = 'data'">
+                    Data
+                </button>
+                <button @click="isDrawerOpen = false" class="close-btn">
+                    ✖
+                </button>
             </div>
 
             <div class="drawer-content">
-
                 <div v-show="drawerTab === 'groceries'" class="tab-scroll-area">
                     <div v-if="!displayGroceries" class="empty-state-drawer">
                         Nothing to buy yet.
@@ -381,7 +477,7 @@ const openPrintView = () => {
                         <div v-if="categoryHasItems(category)" draggable="true" @dragstart="onDragStart(category)"
                             @dragover.prevent @drop="onDrop(category)" @dragend="onDragEnd" class="g-category-group"
                             :class="{ 'is-dragging': draggedCategory === category }">
-                            
+
                             <h5 class="g-category-title">☰ {{ category }}</h5>
 
                             <ul class="g-list">
@@ -399,12 +495,6 @@ const openPrintView = () => {
                             </ul>
                         </div>
                     </template>
-                </div>
-
-                <div class="export-footer" v-show="drawerTab === 'groceries' && proposedMenu.length > 0">
-                    <button @click="openPrintView" class="btn-secondary btn-sm">🖨️ Print</button>
-                    <button @click="copyToClipboard" class="btn-secondary btn-sm">📋 Copy Text</button>
-                    <button @click="exportJSON" class="btn-secondary btn-sm">📦 JSON</button>
                 </div>
 
                 <div v-show="drawerTab === 'prep'">
@@ -431,8 +521,34 @@ const openPrintView = () => {
                     </div>
                 </div>
 
+                <div v-show="drawerTab === 'data'" class="tab-scroll-area data-tab">
+                    <div class="data-section">
+                        <h3>📤 Export Menu</h3>
+                        <p>Download your current meal plan, scales, and grocery list as a raw JSON file for safekeeping
+                            or automation.</p>
+                        <button @click="exportJSON" class="btn-primary" :disabled="proposedMenu.length === 0">
+                            Download .json
+                        </button>
+                    </div>
+
+                    <hr class="data-divider" />
+
+                    <div class="data-section">
+                        <h3>📥 Import Menu</h3>
+                        <p>Upload a previously exported JSON file to instantly restore the meal plan and recalculate the
+                            grocery list.</p>
+                        <input type="file" accept=".json" @change="importJSON" class="file-input" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="export-footer" v-if="drawerTab === 'groceries' && proposedMenu.length > 0">
+                <button @click="copyShareLink" class="btn-secondary btn-sm">🔗 Share</button>
+                <button @click="copyToClipboard" class="btn-secondary btn-sm">📋 Copy</button>
+                <button @click="printList" class="btn-secondary btn-sm">🖨️ Print</button>
             </div>
         </aside>
+
         <div v-if="isSwapModalOpen" class="modal-overlay" @click.self="closeSwapModal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -622,19 +738,20 @@ const openPrintView = () => {
 }
 
 .drawer-tabs>button:first-child {
-    margin-left: 0.3rem;
-    border-top-left-radius: 8px;
+    /* margin-left: 0.3rem; */
+    border-top-left-radius: 12px;
 }
 
 .drawer-tabs button {
     flex: 1;
+    height: 100%;
     padding: 1rem;
     background: none;
     border: none;
     font-weight: bold;
     color: var(--text-muted);
     cursor: pointer;
-    transition: color 0.2s, border 0.5s ease, background 0.5s ease;
+    transition: color 0.2s ease, box-shadow 0.2s ease, border 0.5s ease, background 0.5s ease;
 }
 
 .drawer-tabs button.active {
@@ -644,13 +761,17 @@ const openPrintView = () => {
 }
 
 .drawer-tabs button:hover:not(.active) {
-    color: var(--text-main);
+    color: var(--accent-hover);
+    box-shadow: 0px 4px 0px -2px var(--accent-hover);
+    background: var(--bg-surface);
 }
 
 .close-btn {
     flex: 0 0 50px !important;
-    color: var(--text-faint) !important;
+    /* height: 100%; */
     font-size: 1.2rem;
+    box-shadow: none !important;
+    border-top-right-radius: 12px;
 }
 
 /* Content */
@@ -853,7 +974,7 @@ const openPrintView = () => {
     opacity: 0.4;
 }
 
-.crossed-off > .g-item-label {
+.crossed-off>.g-item-label {
     text-decoration: line-through;
 }
 
@@ -982,5 +1103,57 @@ const openPrintView = () => {
 
 .swap-info .btn-primary {
     width: 100%;
+}
+
+.data-tab {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.data-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.data-section h3 {
+    margin: 0;
+    color: var(--text-main);
+}
+
+.data-section p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.data-divider {
+    border: none;
+    border-top: 1px solid var(--border-color);
+    margin: 0.5rem 0;
+}
+
+.file-input {
+    background: var(--bg-page);
+    border: 1px dashed var(--border-color);
+    padding: 0.75rem;
+    border-radius: 6px;
+    color: var(--text-main);
+    cursor: pointer;
+}
+
+/* Fixes the default ugly file input button on some browsers */
+.file-input::file-selector-button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    margin-right: 1rem;
+    cursor: pointer;
+    font-weight: bold;
 }
 </style>

@@ -14,6 +14,7 @@ RUN npm run build
 FROM nginx:alpine
 # Copy the compiled static files from the builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80 inside the container (which docker-compose maps to 8080 for NPM)
 EXPOSE 80

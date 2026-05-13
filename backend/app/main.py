@@ -32,6 +32,186 @@ def get_db():
         db.close()
 
 
+def get_grocery_aisle(ingredient_name: str) -> str:
+    """A prioritized lexical scanner to sort ingredients into supermarket aisles."""
+    name = ingredient_name.lower()
+
+    # Order matters. We check these buckets sequentially.
+    taxonomy = {
+        # Spices MUST go first to catch "Garlic Powder" or "Dried Parsley"
+        # before the Produce bucket catches the raw root words.
+        "Spices & Seasonings": [
+            "salt",
+            "black pepper",
+            "white pepper",
+            "paprika",
+            "garlic powder",
+            "onion powder",
+            "spice",
+            "seasoning",
+            "powder",
+            "blend",
+            "rub",
+            "flakes",
+            "dried",
+            "cumin",
+            "cayenne",
+            "coriander",
+            "oregano",
+            "thyme",
+            "basil",
+            "cinnamon",
+            "clove",
+            "allspice",
+            "nutmeg",
+            "turmeric",
+            "sumac",
+        ],
+        "Pantry & Dry Goods": [
+            "rice",
+            "pasta",
+            "couscous",
+            "spaghetti",
+            "penne",
+            "macaroni",
+            "flour",
+            "sugar",
+            "oil",
+            "almond",
+            "peanut",
+            "walnut",
+            "sesame",
+            "seed",
+            "panko",
+            "breadcrumbs",
+        ],
+        "Sauces & Condiments": [
+            "soy sauce",
+            "pesto",
+            "mayo",
+            "ketchup",
+            "mustard",
+            "vinegar",
+            "hot sauce",
+            "sriracha",
+            "paste",
+            "concentrate",
+            "stock",
+            "broth",
+            "jam",
+            "glaze",
+            "dressing",
+            "sauce",
+            "syrup",
+            "honey",
+        ],
+        "Seafood": [
+            "shrimp",
+            "salmon",
+            "tilapia",
+            "barramundi",
+            "cod",
+            "trout",
+            "fish",
+        ],
+        "Dairy & Eggs": [
+            "cheese",
+            "milk",
+            "butter",
+            "egg",
+            "sour cream",
+            "yogurt",
+            "crema",
+            "parmesan",
+            "gouda",
+            "cheddar",
+            "mozzarella",
+            "jack",
+        ],
+        "Bakery": [
+            "bun",
+            "bread",
+            "tortilla",
+            "flatbread",
+            "baguette",
+            "pita",
+            "crust",
+            "roll",
+        ],
+        "Produce": [
+            "onion",
+            "garlic",
+            "chives",
+            "lemon",
+            "lime",
+            "potato",
+            "carrot",
+            "scallion",
+            "tomato",
+            "pepper",
+            "ginger",
+            "zucchini",
+            "broccoli",
+            "lettuce",
+            "cabbage",
+            "cilantro",
+            "parsley",
+            "dill",
+            "apple",
+            "cucumber",
+            "arugula",
+            "spinach",
+            "mushroom",
+            "celery",
+            "shallot",
+        ],
+        "Meat & Poultry": [
+            "chicken",
+            "beef",
+            "pork",
+            "sausage",
+            "turkey",
+            "bacon",
+            "steak",
+            "prosciutto",
+            "chorizo",
+            "meatball",
+        ],
+    }
+
+    for aisle, keywords in taxonomy.items():
+        if any(word in name for word in keywords):
+            return aisle
+
+    return "Misc / Other"
+
+
+def normalize_volume(amount, unit):
+    """Converts standard cooking volumes to teaspoons."""
+    if not amount or not unit:
+        return amount, unit, False
+
+    u = unit.lower()
+    if "cup" in u or "(c)" in u:
+        return amount * 48.0, "tsp", True
+    if "tablespoon" in u or "tbsp" in u:
+        return amount * 3.0, "tsp", True
+    if "teaspoon" in u or "tsp" in u:
+        return amount, "tsp", True
+
+    return amount, unit, False
+
+
+def optimize_volume(amount, unit):
+    """Scales teaspoons back up to the highest clean unit."""
+    if unit == "tsp":
+        if amount >= 48:
+            return amount / 48.0, "cup"
+        if amount >= 3:
+            return amount / 3.0, "tbsp"
+    return amount, unit
+
+
 # --- Pydantic Models ---
 class RecipeOut(BaseModel):
     id: str
@@ -152,36 +332,10 @@ def get_random_recipe_ids(limit: int = 5, db: Session = Depends(get_db)):
     ids = db.query(Recipe.id).order_by(func.random()).limit(limit).all()
     return [id[0] for id in ids]
 
-
-def get_grocery_aisle(ingredient_name: str) -> str:
-    """A prioritized lexical scanner to sort ingredients into supermarket aisles."""
-    name = ingredient_name.lower()
-    
-    # Order matters. We check these buckets sequentially.
-    taxonomy = {
-        # Spices MUST go first to catch "Garlic Powder" or "Dried Parsley" 
-        # before the Produce bucket catches the raw root words.
-        "Spices & Seasonings": ["salt", "black pepper", "white pepper", "paprika", "garlic powder", "onion powder", "spice", "seasoning", "powder", "blend", "rub", "flakes", "dried", "cumin", "cayenne", "coriander", "oregano", "thyme", "basil", "cinnamon", "clove", "allspice", "nutmeg", "turmeric", "sumac"],
-        "Pantry & Dry Goods": ["rice", "pasta", "couscous", "spaghetti", "penne", "macaroni", "flour", "sugar", "oil", "almond", "peanut", "walnut", "sesame", "seed", "panko", "breadcrumbs"],
-        "Sauces & Condiments": ["soy sauce", "pesto", "mayo", "ketchup", "mustard", "vinegar", "hot sauce", "sriracha", "paste", "concentrate", "stock", "broth", "jam", "glaze", "dressing", "sauce", "syrup", "honey"],
-        "Seafood": ["shrimp", "salmon", "tilapia", "barramundi", "cod", "trout", "fish"],
-        "Dairy & Eggs": ["cheese", "milk", "butter", "egg", "sour cream", "yogurt", "crema", "parmesan", "gouda", "cheddar", "mozzarella", "jack"],
-        "Bakery": ["bun", "bread", "tortilla", "flatbread", "baguette", "pita", "crust", "roll"],
-        "Produce": ["onion", "garlic", "chives", "lemon", "lime", "potato", "carrot", "scallion", "tomato", "pepper", "ginger", "zucchini", "broccoli", "lettuce", "cabbage", "cilantro", "parsley", "dill", "apple", "cucumber", "arugula", "spinach", "mushroom", "celery", "shallot"],
-        "Meat & Poultry": ["chicken", "beef", "pork", "sausage", "turkey", "bacon", "steak", "prosciutto", "chorizo", "meatball"],
-    }
-    
-    for aisle, keywords in taxonomy.items():
-        if any(word in name for word in keywords):
-            return aisle
-            
-    return "Misc / Other"
-
-
 @app.post("/api/grocery-list")
 def generate_grocery_list(request: GroceryListRequest, db: Session = Depends(get_db)):
     """The Categorized Bulk-Optimized Grocery Engine."""
-    
+
     unique_recipe_ids = list(request.recipe_scales.keys())
 
     items = db.query(RecipeIngredient, Ingredient).join(Ingredient).filter(
@@ -205,10 +359,36 @@ def generate_grocery_list(request: GroceryListRequest, db: Session = Depends(get
                 "unit": link.unit or "",
                 "unit_conversion": ingredient.unit_conversion
             }
-        
+
         if link.amount:
             multiplier = request.recipe_scales.get(link.recipe_id, 1.0)
-            grocery_dict[category][name_lower]["amount"] += (link.amount * multiplier)
+            added_amount = link.amount * multiplier
+
+            add_amt_norm, add_unit_norm, is_vol = normalize_volume(
+                added_amount, link.unit or ""
+            )
+
+            curr_amt = grocery_dict[category][name_lower]["amount"]
+            curr_unit = grocery_dict[category][name_lower]["unit"]
+            curr_amt_norm, _, curr_is_vol = normalize_volume(curr_amt, curr_unit)
+
+            if is_vol or curr_is_vol:
+                grocery_dict[category][name_lower]["amount"] = (
+                    curr_amt_norm + add_amt_norm
+                )
+                grocery_dict[category][name_lower][
+                    "unit"
+                ] = "tsp"  # Temporary holding unit
+            else:
+                grocery_dict[category][name_lower]["amount"] += added_amount
+
+    # optimize volume for "duplicate" ingredients
+    for cat in grocery_dict:
+        for name_lower in grocery_dict[cat]:
+            item = grocery_dict[cat][name_lower]
+            opt_amt, opt_unit = optimize_volume(item["amount"], item["unit"])
+            item["amount"] = opt_amt
+            item["unit"] = opt_unit
 
     # Sort the single dictionary
     formatted = {}
