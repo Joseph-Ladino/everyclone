@@ -1,9 +1,15 @@
 export function sixteenthsToFraction(n) {
+    if(!n) 
+        return "";
+    
     let whole = Math.floor(n), dec = n - whole;
     let num = Math.round(dec * 16), denom = 16;
 
-    if(Math.abs(dec) < 0.0001) 
-        return whole.toString();
+    if(num == 0)
+        return whole != 0 ? whole.toString() : "";
+    
+    if(num == 16)
+        return (whole + 1).toString();
 
     while (num % 2 == 0) {
         num >>= 1;

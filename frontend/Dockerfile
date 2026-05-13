@@ -5,8 +5,7 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 
-ARG VITE_API_URL
-ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_API_URL="/api"
 
 # This compiles everything into the /dist folder
 RUN npm run build 

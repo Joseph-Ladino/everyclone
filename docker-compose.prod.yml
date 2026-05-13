@@ -12,9 +12,7 @@ services:
       - ./init_prod.sql:/docker-entrypoint-initdb.d/init_prod.sql
 
   backend:
-    build: 
-      context: ./backend
-      dockerfile: Dockerfile
+    image: dioswneddev/ep-backend:latest
     container_name: ep_fastapi_prod
     restart: always
     environment:
@@ -27,11 +25,7 @@ services:
       - db
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-      args:
-        - VITE_API_URL=${BACKEND_URL}
+    image: dioswneddev/ep-frontend:latest
     container_name: ep_vue_prod
     restart: always
     ports:
