@@ -11,7 +11,7 @@ export function getRawMath(amount, unit, conversion = null, scale = 1) {
 
     if (conversion) {
         // Handle if your backend sends an object: { amount: 6.09, unit: 'fl oz' }
-        if (typeof conversion === 'object' && conversion.amount) {
+        if (typeof conversion === 'object' && conversion.amount && unit == "unit") {
             finalAmount = amount * conversion.amount * scale;
             finalUnit = conversion.unit;
         }
